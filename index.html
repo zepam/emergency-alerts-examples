@@ -5,17 +5,34 @@
   <title>Multilingual Emergency Alerts</title>
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
-    .alert-container { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px; }
+    select { margin: 10px 0; padding: 5px; font-size: 16px; }
+
+    /* English box styling */
+    .english-box {
+      background: #fff3cd;
+      border: 1px solid #ffeeba;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .english-box .alert-title { font-weight: bold; font-size: 18px; margin-bottom: 10px; }
+
+    /* Grid for translations */
+    .translations-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
     .alert-box {
-      flex: 1 1 300px;
       background: white;
       border: 1px solid #ddd;
       padding: 15px;
       border-radius: 8px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    .alert-title { font-weight: bold; margin-bottom: 10px; }
-    select { margin: 10px; padding: 5px; }
+    .alert-box .alert-title { font-weight: bold; margin-bottom: 10px; }
   </style>
 </head>
 <body>
@@ -30,14 +47,16 @@
     <option value="911_outage">911 Outage</option>
   </select>
 
-  <div id="alertsContainer" class="alert-container"></div>
+  <div id="alertsContainer">
+    <!-- English + translations will appear here -->
+  </div>
 
   <script>
     let alertsData = {};
 
     async function loadAlerts() {
       try {
-        const response = await fetch("evaluation_gold_standards.json"); // JSON must be in same folder
+        const response = await fetch("evaluation_gold_standards.json");
         if (!response.ok) throw new Error("Failed to load JSON");
         alertsData = await response.json();
         showAlert();
@@ -52,25 +71,27 @@
       const container = document.getElementById("alertsContainer");
       container.innerHTML = "";
 
-      let englishShown = false;
+      let englishDivCreated = false;
+      const translationsGrid = document.createElement("div");
+      translationsGrid.className = "translations-grid";
 
       for (const lang in alertsData) {
         if (alertsData[lang][type]) {
           const alert = alertsData[lang][type];
 
-          // Show English only once
-          if (!englishShown) {
+          // Show English once
+          if (!englishDivCreated) {
             const englishDiv = document.createElement("div");
-            englishDiv.className = "alert-box";
+            englishDiv.className = "english-box";
             englishDiv.innerHTML = `
               <div class="alert-title">English</div>
               <div>${alert.source}</div>
             `;
             container.appendChild(englishDiv);
-            englishShown = true;
+            englishDivCreated = true;
           }
 
-          // Skip English itself if lang is "english" (in case your JSON has it)
+          // Skip English itself
           if (lang.toLowerCase() !== "english") {
             const translatedDiv = document.createElement("div");
             translatedDiv.className = "alert-box";
@@ -78,10 +99,12 @@
               <div class="alert-title">${lang.replace("_"," ")}</div>
               <div>${alert.reference}</div>
             `;
-            container.appendChild(translatedDiv);
+            translationsGrid.appendChild(translatedDiv);
           }
         }
       }
+
+      container.appendChild(translationsGrid);
     }
 
     document.getElementById("alertType").addEventListener("change", showAlert);
