@@ -52,27 +52,34 @@
       const container = document.getElementById("alertsContainer");
       container.innerHTML = "";
 
+      let englishShown = false;
+
       for (const lang in alertsData) {
         if (alertsData[lang][type]) {
           const alert = alertsData[lang][type];
 
-          // English box
-          const englishDiv = document.createElement("div");
-          englishDiv.className = "alert-box";
-          englishDiv.innerHTML = `
-            <div class="alert-title">English</div>
-            <div>${alert.source}</div>
-          `;
-          container.appendChild(englishDiv);
+          // Show English only once
+          if (!englishShown) {
+            const englishDiv = document.createElement("div");
+            englishDiv.className = "alert-box";
+            englishDiv.innerHTML = `
+              <div class="alert-title">English</div>
+              <div>${alert.source}</div>
+            `;
+            container.appendChild(englishDiv);
+            englishShown = true;
+          }
 
-          // Translated box
-          const translatedDiv = document.createElement("div");
-          translatedDiv.className = "alert-box";
-          translatedDiv.innerHTML = `
-            <div class="alert-title">${lang.replace("_"," ")}</div>
-            <div>${alert.reference}</div>
-          `;
-          container.appendChild(translatedDiv);
+          // Skip English itself if lang is "english" (in case your JSON has it)
+          if (lang.toLowerCase() !== "english") {
+            const translatedDiv = document.createElement("div");
+            translatedDiv.className = "alert-box";
+            translatedDiv.innerHTML = `
+              <div class="alert-title">${lang.replace("_"," ")}</div>
+              <div>${alert.reference}</div>
+            `;
+            container.appendChild(translatedDiv);
+          }
         }
       }
     }
