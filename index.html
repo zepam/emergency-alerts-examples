@@ -37,7 +37,7 @@
 
     async function loadAlerts() {
       try {
-        const response = await fetch("alerts.json"); // JSON must be in same folder
+        const response = await fetch("evaluation_gold_standards.json"); // JSON must be in same folder
         if (!response.ok) throw new Error("Failed to load JSON");
         alertsData = await response.json();
         showAlert();
