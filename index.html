@@ -30,7 +30,7 @@
 
     async function loadAlerts() {
       try {
-        const response = await fetch("alerts.json");
+        const response = await fetch("evaluation_gold_standards.json");
         if (!response.ok) throw new Error("Failed to load JSON");
         alertsData = await response.json();
         showAlert();
