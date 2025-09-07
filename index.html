@@ -5,9 +5,16 @@
   <title>Multilingual Emergency Alerts</title>
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
-    .alert { background: white; border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 8px; }
-    .language-block { margin-bottom: 10px; }
-    .language-name { font-weight: bold; margin-bottom: 5px; }
+    .alert-container { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px; }
+    .alert-box {
+      flex: 1 1 300px;
+      background: white;
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .alert-title { font-weight: bold; margin-bottom: 10px; }
     select { margin: 10px; padding: 5px; }
   </style>
 </head>
@@ -23,14 +30,14 @@
     <option value="911_outage">911 Outage</option>
   </select>
 
-  <div id="alertsContainer"></div>
+  <div id="alertsContainer" class="alert-container"></div>
 
   <script>
     let alertsData = {};
 
     async function loadAlerts() {
       try {
-        const response = await fetch("evaluation_gold_standards.json");
+        const response = await fetch("alerts.json"); // JSON must be in same folder
         if (!response.ok) throw new Error("Failed to load JSON");
         alertsData = await response.json();
         showAlert();
@@ -48,16 +55,24 @@
       for (const lang in alertsData) {
         if (alertsData[lang][type]) {
           const alert = alertsData[lang][type];
-          const div = document.createElement("div");
-          div.className = "alert";
-          div.innerHTML = `
-            <div class="language-block">
-              <div class="language-name">${lang.replace("_"," ")}</div>
-              <div><strong>English:</strong> ${alert.source}</div>
-              <div><strong>Translation:</strong> ${alert.reference}</div>
-            </div>
+
+          // English box
+          const englishDiv = document.createElement("div");
+          englishDiv.className = "alert-box";
+          englishDiv.innerHTML = `
+            <div class="alert-title">English</div>
+            <div>${alert.source}</div>
           `;
-          container.appendChild(div);
+          container.appendChild(englishDiv);
+
+          // Translated box
+          const translatedDiv = document.createElement("div");
+          translatedDiv.className = "alert-box";
+          translatedDiv.innerHTML = `
+            <div class="alert-title">${lang.replace("_"," ")}</div>
+            <div>${alert.reference}</div>
+          `;
+          container.appendChild(translatedDiv);
         }
       }
     }
@@ -67,4 +82,3 @@
   </script>
 </body>
 </html>
-
