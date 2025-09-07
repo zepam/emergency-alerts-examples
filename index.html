@@ -1,1 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Multilingual Emergency Alerts</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
+    .alert { background: white; border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 8px; }
+    .language-block { margin-bottom: 10px; }
+    .language-name { font-weight: bold; margin-bottom: 5px; }
+    select { margin: 10px; padding: 5px; }
+  </style>
+</head>
+<body>
+  <h1>⚠️ Emergency Alerts</h1>
+
+  <label for="alertType">Choose an alert type:</label>
+  <select id="alertType">
+    <option value="flood">Flood</option>
+    <option value="extreme_wind">Extreme Wind</option>
+    <option value="fire">Fire</option>
+    <option value="boil_water_notice">Boil Water Notice</option>
+    <option value="911_outage">911 Outage</option>
+  </select>
+
+  <div id="alertsContainer"></div>
+
+  <script>
+    let alertsData = {};
+
+    async function loadAlerts() {
+      try {
+        const response = await fetch("alerts.json");
+        if (!response.ok) throw new Error("Failed to load JSON");
+        alertsData = await response.json();
+        showAlert();
+      } catch (err) {
+        document.getElementById("alertsContainer").innerHTML =
+          "<p style='color:red;'>Error loading alerts: " + err.message + "</p>";
+      }
+    }
+
+    function showAlert() {
+      const type = document.getElementById("alertType").value;
+      const container = document.getElementById("alertsContainer");
+      container.innerHTML = "";
+
+      for (const lang in alertsData) {
+        if (alertsData[lang][type]) {
+          const alert = alertsData[lang][type];
+          const div = document.createElement("div");
+          div.className = "alert";
+          div.innerHTML = `
+            <div class="language-block">
+              <div class="language-name">${lang.replace("_"," ")}</div>
+              <div><strong>English:</strong> ${alert.source}</div>
+              <div><strong>Translation:</strong> ${alert.reference}</div>
+            </div>
+          `;
+          container.appendChild(div);
+        }
+      }
+    }
+
+    document.getElementById("alertType").addEventListener("change", showAlert);
+    loadAlerts();
+  </script>
+</body>
+</html>
 
