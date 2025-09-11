@@ -5,8 +5,8 @@ This repository provides a simple web-based demonstration of multilingual emerge
 ## Features
 
 - **Interactive Web Page**: Select different types of emergency alerts (Flood, Extreme Wind, Fire, Boil Water Notice, 911 Outage) and view their messages in English and several other languages.
-- **Languages Supported**: Includes translations for Spanish, Haitian Creole, Korean, and more.
-- **Gold Standard Messages**: All alert messages are sourced from `evaluation_gold_standards.json`, which contains standardized templates for each alert type and language.
+- **Languages Supported**: Includes translations for Spanish, Haitian Creole, Vietnamese, Arabic, Chinese (traditional), Chinese (simplified), Korean, Russian, Ukrainian, Tagalog, Hindi, and Korean.
+- **Gold Standard Messages**: All alert messages are sourced from `evaluation_gold_standards.json`, which contains standardized templates for each alert type and language. These templates are from the FCC's [Wireless Emergency Alerts; Amendments to Part 11 of the Commission's Rules Regarding the Emergency Alert System](https://www.fcc.gov/document/fcc-adopts-implementation-requirements-multilingual-wea-template)
 
 ## Files
 
