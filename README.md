@@ -2,6 +2,8 @@
 
 This repository provides a simple web-based demonstration of multilingual emergency alerts. It is designed to showcase how critical public safety messages can be presented in multiple languages for improved accessibility and community safety. This demo is an example of a possible implementation of the FCC's [Multilingual Wireless Emergency Alert Guidance](https://www.fcc.gov/sites/default/files/WEA-Multilingual-Fillable-Alert-Templates-Guidance-2025.pdf) released on July 18, 2025.
 
+You can see the example [here](https://zepam.github.io/emergency-alerts-examples/).
+
 ## Features
 
 - **Interactive Web Page**: Select different types of emergency alerts (Flood, Extreme Wind, Fire, Boil Water Notice, 911 Outage) and view their messages in English and several other languages.
